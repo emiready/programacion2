@@ -1,0 +1,144 @@
+package tp6emilianoalvarez_2;
+
+import java.util.ArrayList;
+
+
+public class Biblioteca {
+
+// --- Atributos ---
+    private String nombre;
+    private ArrayList<Libro> libros;
+    
+    /**
+     * Constructor para crear una nueva Biblioteca.
+     * @param nombre El nombre de la biblioteca.
+     */
+    public Biblioteca(String nombre) {
+        this.nombre = nombre;
+        this.libros = new ArrayList<>(); // Inicializa la colección
+    }   
+    
+    // --- Métodos de Gestión ---
+    
+    /**
+     * Crea un nuevo objeto Libro y lo añade a la colección.
+     * @param isbn
+     * @param titulo
+     * @param anioPublicacion
+     * @param autor
+     */
+    public void agregarLibro(String isbn, String titulo, int anioPublicacion, Autor autor){ 
+        // Valida que el autor no sea nulo
+        if (autor == null) {
+            System.out.println("Error: No se puede agregar un libro sin autor.");
+            return;
+        }
+        this.libros.add(new Libro(isbn, titulo, anioPublicacion, autor));       
+    }
+    
+    /**
+     * Imprime la lista de todos los libros en la colección.
+     */
+    public void listarLibros(){ 
+        System.out.println("--------------------------------------------------------------");
+        System.out.println("Listado de libros en: " + this.nombre);
+        if (libros.isEmpty()) {
+            System.out.println("La biblioteca está vacía.");
+        } else {
+            for (Libro libro : libros) {
+                libro.mostrarInfo();           
+            }
+        }
+        System.out.println("--------------------------------------------------------------");   
+    }
+    
+    /**
+     * Busca y retorna un libro por su ISBN (ignorando mayúsculas/minúsculas).
+     * @param isbn El ISBN a buscar.
+     * @return El objeto Libro encontrado, o null si no existe.
+     */
+    public Libro buscarLibroPorIsbn(String isbn){  
+        Libro libroEncontrado = null;
+        for (Libro libro : libros) {
+            if (isbn != null && libro.getIsbn().equalsIgnoreCase(isbn)){
+                libroEncontrado = libro;
+                break; // Optimización
+            }
+        }
+        return libroEncontrado; 
+    }
+    
+    /**
+     * Elimina un libro de la colección usando su ISBN.
+     * @param isbn El ISBN del libro a eliminar.
+     */
+    public void eliminarLibro(String isbn){   
+        Libro l = buscarLibroPorIsbn(isbn);
+        if (l != null) {
+            libros.remove(l);
+            System.out.println("Libro: " + isbn + " (" + l.getTitulo() + ") eliminado.");
+        } else {
+            System.out.println("Error: No se pudo eliminar el libro " + isbn + " (no encontrado).");
+        }
+    } 
+    
+    // --- Métodos de Reportes ---
+    
+    /**
+     * Muestra la cantidad total de libros en la colección.
+     */
+    public void obtenerCantidadLibros(){ 
+        System.out.println("La biblioteca '" + this.nombre + "' contiene " + this.libros.size() + " libros.");        
+    }
+    
+    /**
+     * Imprime un listado de libros publicados en un año específico.
+     * @param anio El año a filtrar.
+     */
+    public void filtrarLibrosPorAnio(int anio){ 
+        ArrayList<Libro> porAnio = new ArrayList<>();
+        for (Libro libro : libros) {
+            if(libro.getAniopublicacion() == anio){
+                porAnio.add(libro);               
+            }           
+        }
+        
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("Libros publicados en el año " + anio);
+        if (porAnio.isEmpty()) {
+            System.out.println("No se encontraron libros para ese año.");
+        } else {
+            for (Libro libro : porAnio) {
+                libro.mostrarInfo();           
+            }
+        }
+        System.out.println("------------------------------------------------------------------");
+    }
+    
+    /**
+     * Muestra una lista de autores únicos (sin repetir) que están en la biblioteca.
+     */
+    public void mostrarAutoresDisponibles(){
+        ArrayList<Autor> autoresDisponibles = new ArrayList<>();
+        for (Libro libro : libros) {
+            // Verifica si el autor de este libro ya está en la lista de disponibles
+            if(!autoresDisponibles.contains(libro.getAutor())){
+                autoresDisponibles.add(libro.getAutor());               
+            }           
+        }
+        
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("Autores disponibles en biblioteca:");
+        if (autoresDisponibles.isEmpty()) {
+            System.out.println("No hay autores para mostrar.");
+        } else {
+            for (Autor autor : autoresDisponibles) {
+                System.out.println(autor.getNombre() + " (" + autor.getNacionalidad() + ")");           
+            }
+        }
+        System.out.println("------------------------------------------------------------------");
+        
+    }
+
+    
+}
