@@ -1,0 +1,294 @@
+package trabajopractico5;
+public class Trabajopractico5 {
+
+    // ---------------------------------------------------
+    // EJERCICIO 1: Pasaporte - Foto - Titular
+    // Composición: Pasaporte tiene una Foto
+    // Asociación: Pasaporte se relaciona con un Titular
+    // ---------------------------------------------------
+    class Pasaporte {
+        String numero;
+        Foto foto;
+        Titular titular;
+    }
+
+    class Foto {
+        String formato;
+    }
+
+    class Titular {
+        String nombre;
+        String dni;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 2: Celular - Batería - Usuario
+    // Agregación: Celular usa una Batería
+    // Asociación: Celular se relaciona con un Usuario
+    // ---------------------------------------------------
+    class Celular {
+        String modelo;
+        Bateria bateria;
+        Usuario usuario;
+    }
+
+    class Bateria {
+        int capacidad;
+    }
+
+    class Usuario {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 3: Libro - Autor - Editorial
+    // Asociación: Libro conoce un Autor
+    // Agregación: Libro pertenece a una Editorial
+    // ---------------------------------------------------
+    class Libro {
+        String titulo;
+        Autor autor;
+        Editorial editorial;
+    }
+
+    class Autor {
+        String nombre;
+    }
+
+    class Editorial {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 4: TarjetaDeCredito - Cliente - Banco
+    // Asociación: TarjetaDeCredito se asocia a un Cliente
+    // Agregación: TarjetaDeCredito pertenece a un Banco
+    // ---------------------------------------------------
+    class TarjetaDeCredito {
+        String numero;
+        Cliente cliente;
+        Banco banco;
+    }
+
+    class Cliente {
+        String nombre;
+    }
+
+    class Banco {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 5: Computadora - PlacaMadre - Propietario
+    // Composición: Computadora tiene una PlacaMadre
+    // Asociación: Computadora pertenece a un Propietario
+    // ---------------------------------------------------
+    class Computadora {
+        String marca;
+        PlacaMadre placaMadre;
+        Propietario propietario;
+    }
+
+    class PlacaMadre {
+        String modelo;
+    }
+
+    class Propietario {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 6: Reserva - Cliente - Mesa
+    // Asociación: Reserva se relaciona con un ClienteReserva
+    // Agregación: Reserva utiliza una Mesa
+    // ---------------------------------------------------
+    class Reserva {
+        String fecha;
+        ClienteReserva cliente;
+        Mesa mesa;
+    }
+
+    class ClienteReserva {
+        String nombre;
+    }
+
+    class Mesa {
+        int numero;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 7: Vehículo - Motor - Conductor
+    // Agregación: Vehículo tiene un Motor
+    // Asociación: Vehículo se relaciona con un Conductor
+    // ---------------------------------------------------
+    class Vehiculo {
+        String patente;
+        Motor motor;
+        Conductor conductor;
+    }
+
+    class Motor {
+        String tipo;
+    }
+
+    class Conductor {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 8: Documento - FirmaDigital - Usuario
+    // Composición: Documento tiene una FirmaDigital
+    // Agregación: FirmaDigital pertenece a un UsuarioFirma
+    // ---------------------------------------------------
+    class Documento {
+        String titulo;
+        FirmaDigital firma;
+    }
+
+    class FirmaDigital {
+        String codigo;
+        UsuarioFirma usuario;
+    }
+
+    class UsuarioFirma {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 9: CitaMedica - Paciente - Profesional
+    // Asociación: CitaMedica se relaciona con un Paciente
+    // Asociación: CitaMedica se relaciona con un Profesional
+    // ---------------------------------------------------
+    class CitaMedica {
+        String fecha;
+        Paciente paciente;
+        Profesional profesional;
+    }
+
+    class Paciente {
+        String nombre;
+    }
+
+    class Profesional {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 10: CuentaBancaria - ClaveSeguridad - Titular
+    // Composición: CuentaBancaria tiene una ClaveSeguridad
+    // Asociación: CuentaBancaria pertenece a un TitularCuenta
+    // ---------------------------------------------------
+    class CuentaBancaria {
+        String cbu;
+        ClaveSeguridad clave;
+        TitularCuenta titular;
+    }
+
+    class ClaveSeguridad {
+        String codigo;
+    }
+
+    class TitularCuenta {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 11: Reproductor - Cancion - Artista
+    // Asociación: Cancion se asocia con un Artista
+    // Dependencia de uso: Reproductor reproduce Cancion
+    // ---------------------------------------------------
+    class Reproductor {
+        void reproducir(Cancion c) {
+            System.out.println("Reproduciendo canción...");
+        }
+    }
+
+    class Cancion {
+        String titulo;
+        Artista artista;
+    }
+
+    class Artista {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 12: Impuesto - Contribuyente - Calculadora
+    // Asociación: Impuesto se asocia con un Contribuyente
+    // Dependencia de uso: Calculadora calcula Impuesto
+    // ---------------------------------------------------
+    class Impuesto {
+        double monto;
+        Contribuyente contribuyente;
+    }
+
+    class Contribuyente {
+        String nombre;
+    }
+
+    class Calculadora {
+        void calcular(Impuesto i) {
+            System.out.println("Calculando impuesto...");
+        }
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 13: GeneradorQR - Usuario - CodigoQR
+    // Dependencia de creación: GeneradorQR crea CodigoQR
+    // ---------------------------------------------------
+    class GeneradorQR {
+        CodigoQR generar(String valor) {
+            return new CodigoQR();
+        }
+    }
+
+    class CodigoQR {
+        String valor;
+    }
+
+    class UsuarioQR {
+        String nombre;
+    }
+
+
+    // ---------------------------------------------------
+    // EJERCICIO 14: EditorVideo - Proyecto - Render
+    // Dependencia de creación: EditorVideo genera un Render
+    // ---------------------------------------------------
+    class EditorVideo {
+        Render exportar(String formato) {
+            return new Render();
+        }
+    }
+
+    class Proyecto {
+        String nombre;
+    }
+
+    class Render {
+        String formato;
+    }
+
+
+    // ---------------------------------------------------
+    // MÉTODO MAIN (solo muestra un mensaje)
+    // ---------------------------------------------------
+    public static void main(String[] args) {
+        System.out.println("Relaciones UML 1 a 1 - Versión Simplificada");
+    }
+}
+
+
+    
