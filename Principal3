@@ -1,0 +1,97 @@
+package tp6emilianoalvarez_3;
+
+/**
+ * Clase principal para probar la funcionalidad del sistema Universidad.
+ * Contiene el método main() que ejecuta las pruebas de asignación bidireccional.
+ */
+public class Principal3 {
+    
+    public static void main(String[] args){
+        
+        // 1. Crear al menos 3 profesores y 5 cursos (Datos modificados)
+        System.out.println("--- 1. Creando entidades ---");
+        Profesor profe1 = new Profesor("P101", "Laura Gomez", "INFORMATICA");
+        Profesor profe2 = new Profesor("P102", "Martin Diaz", "INFORMATICA");
+        Profesor profe3 = new Profesor("P103", "Ana Morales", "SOCIALES");
+        Profesor profe4 = new Profesor("P104", "Diego Costa", "CIENCIAS EXACTAS");
+        
+        Curso curso1 = new Curso("C101", "PROGRAMACION I");
+        Curso curso2 = new Curso("C102", "SISTEMAS OPERATIVOS");
+        Curso curso3 = new Curso("C103", "BASES DE DATOS");
+        Curso curso4 = new Curso("C104", "SOCIOLOGIA");
+        Curso curso5 = new Curso("C105", "HISTORIA MODERNA");
+        Curso curso6 = new Curso("C106", "ALGEBRA LINEAL"); 
+
+        // 2. Agregar profesores y cursos a la universidad (Datos modificados)
+        System.out.println("--- 2. Registrando en la Universidad ---");
+        Universidad uni1 = new Universidad("UBA"); // Nombre de U. modificado
+        
+        uni1.agregarProfesor(profe1); // Gomez
+        uni1.agregarProfesor(profe2); // Diaz
+        uni1.agregarProfesor(profe3); // Morales
+        uni1.agregarProfesor(profe4); // Costa
+        
+        uni1.agregarCurso(curso1); // Prog I
+        uni1.agregarCurso(curso2); // Sist Op
+        uni1.agregarCurso(curso3); // BBDD
+        uni1.agregarCurso(curso4); // Sociologia
+        uni1.agregarCurso(curso5); // Historia
+        uni1.agregarCurso(curso6); // Algebra
+        
+        // 3. Asignar profesores a cursos (Asignaciones modificadas)
+        System.out.println("--- 3. Asignando profesores a cursos ---");
+        uni1.asignarProfesorACurso("C101", "P101"); // Prog I -> Gomez
+        uni1.asignarProfesorACurso("C102", "P102"); // Sist Op -> Diaz
+        uni1.asignarProfesorACurso("C103", "P101"); // BBDD -> Gomez
+        uni1.asignarProfesorACurso("C104", "P103"); // Socio -> Morales
+        uni1.asignarProfesorACurso("C105", "P103"); // Historia -> Morales
+        uni1.asignarProfesorACurso("C106", "P104"); // Algebra -> Costa
+        
+        // 4. Listar cursos con su profesor y profesores con sus cursos.
+        System.out.println("--- 4. Listados de verificación ---");
+        uni1.listarCursos();
+        uni1.listarProfesores();    
+        
+        
+        // 5. Cambiar el profesor de un curso y verificar sincronización (Prueba modificada)
+        System.out.println("\n--- 5. Cambio de profesor (C103 BBDD) ---");
+        System.out.println("Situación ANTES del cambio:");
+        profe1.listarCursos(); // Gomez debe tener C101 y C103
+        profe2.listarCursos(); // Diaz debe tener C102
+        
+        System.out.println("...REALIZANDO CAMBIO: C103 ahora es de P102...");
+        uni1.asignarProfesorACurso("C103", "P102"); // BBDD ahora es de Diaz
+        
+        System.out.println("\nSituación DESPUÉS del cambio:");
+        profe1.listarCursos(); // Gomez ahora solo debe tener C101
+        profe2.listarCursos(); // Diaz ahora debe tener C102 y C103
+
+        // 6. Remover un curso y confirmar que desaparece de la lista del profesor (Prueba modificada)
+        System.out.println("\n--- 6. Eliminar el curso C106 (Algebra) ---");
+        System.out.println("Cursos de Costa (P104) ANTES de eliminar:");
+        profe4.listarCursos(); // Debe tener C106
+        
+        System.out.println("...ELIMINANDO C106 DE LA UNIVERSIDAD...");
+        uni1.eliminarCurso("C106");
+        
+        System.out.println("\nCursos de Costa (P104) DESPUÉS de eliminar:");
+        profe4.listarCursos(); // Ya no debe tener C106
+        uni1.listarCursos();   // El curso ya no debe aparecer en la universidad
+
+        
+        // 7. Remover un profesor y dejar sus cursos con profesor = null (Prueba modificada)
+        System.out.println("\n--- 7. Eliminar al profesor P103 (Morales) ---");
+        System.out.println("...ELIMINANDO P103 DE LA UNIVERSIDAD...");
+        uni1.eliminarProfesor("P103"); // Morales daba C104 y C105
+        
+        System.out.println("\nListados DESPUÉS de eliminar a P103:");
+        uni1.listarCursos(); // C104 y C105 deben figurar "Sin asignar"
+        uni1.listarProfesores(); // P103 (Morales) ya no debe aparecer
+
+        // 8. Mostrar un reporte: cantidad de cursos por profesor    
+        System.out.println("\n--- 8. Reporte final de carga horaria ---");
+        uni1.reporteCantCursos();
+            
+    }
+
+}
