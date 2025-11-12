@@ -1,0 +1,96 @@
+package tp6emilianoalvarez_1;
+
+
+import tp6emilianoalvarez_1.CategoriaProducto;
+import tp6emilianoalvarez_1.Inventario;
+import tp6emilianoalvarez_1.Producto;
+
+
+public class Principal {
+    
+    public static void main(String[] args) {
+        
+        // 1. Creación de nuevos productos de prueba
+        System.out.println("--- 1. Creando productos ---");
+        Producto p1 = new Producto("B001", "Leche", 550, 40, CategoriaProducto.ALIMENTOS);
+        Producto p2 = new Producto("B002", "Queso", 1500, 15, CategoriaProducto.ALIMENTOS);
+        Producto p3 = new Producto("B003", "Yogur", 450, 30, CategoriaProducto.ALIMENTOS);
+        Producto p4 = new Producto("B004", "Galletitas", 700, 60, CategoriaProducto.ALIMENTOS); // Stock más alto
+        Producto p5 = new Producto("E001", "Laptop", 150000, 7, CategoriaProducto.ELECTRONICA);
+        Producto p6 = new Producto("E002", "Monitor", 75000, 4, CategoriaProducto.ELECTRONICA);
+        Producto p7 = new Producto("E003", "Mouse", 8000, 10, CategoriaProducto.ELECTRONICA);
+        Producto p8 = new Producto("R001", "Camisa", 9000, 12, CategoriaProducto.ROPA);
+        Producto p9 = new Producto("R002", "Medias", 2500, 25, CategoriaProducto.ROPA); // Precio para filtro
+        Producto p10 = new Producto("H001", "Silla", 18000, 6, CategoriaProducto.HOGAR);
+                
+        // Instanciación del inventario y carga de productos
+        Inventario inventario = new Inventario();
+        inventario.agregarProducto(p1); // Leche
+        inventario.agregarProducto(p3); // Yogur
+        inventario.agregarProducto(p5); // Laptop
+        inventario.agregarProducto(p7); // Mouse
+        inventario.agregarProducto(p9); // Medias
+        inventario.agregarProducto(p4); // Galletitas
+        
+        //-------------------------------------------------------------------
+        // 2. Listar todos los productos.
+        System.out.println("\n--- 2. Listado inicial de productos ---");
+        inventario.listarProductos(); //Muestra todos los productos cargados
+        
+        //-------------------------------------------------------------------
+        // 3. Buscar un producto por ID.
+        System.out.println("\n--- 3. Buscar producto B001 ---");
+        Producto pBuscado = inventario.buscarProductoPorId("B001");
+        if (pBuscado != null) {
+            pBuscado.mostrarInfo();
+        } else {
+            System.out.println("Producto no encontrado.");
+        }
+        
+        //-------------------------------------------------------------------
+        // 4. Filtrar por categoría.
+        System.out.println("\n--- 4. Filtrar por categoría ELECTRONICA ---");
+        inventario.filtrarPorCategoria(CategoriaProducto.ELECTRONICA);
+        
+        //-------------------------------------------------------------------
+        // 5. Eliminar un producto por ID.
+        System.out.println("\n--- 5. Eliminar producto B001 ---");
+        inventario.eliminarProducto("b001"); // Prueba con minúscula
+        inventario.listarProductos(); //Muestra productos restantes
+        
+        //-------------------------------------------------------------------
+        // 6. Actualizar el stock de un producto.
+        System.out.println("\n--- 6. Actualizar stock de B003 (Yogur) ---");
+        inventario.actualizarStock("b003", 25); // Lo cambiamos a 25
+        inventario.buscarProductoPorId("B003").mostrarInfo();
+        
+        //-------------------------------------------------------------------
+        // 7. Mostrar el total de stock.
+        System.out.println("\n--- 7. Cálculo de stock total ---");
+        inventario.obtenerTotalStock();
+        
+        //-------------------------------------------------------------------
+        // 8. Mostrar el producto con mayor stock.
+        System.out.println("\n--- 8. Producto con mayor stock ---");
+        // El mayor stock debería ser B004 (Galletitas) con 60
+        inventario.obtenerProductoConMayorStock();
+        
+        // Actualizamos stock para probar el desempate
+        System.out.println("\n--- 8b. Actualizando stock R002 (Medias) a 60 ---");
+        inventario.actualizarStock("R002", 60);
+        inventario.obtenerProductoConMayorStock(); // Ahora deben salir B004 y R002
+        
+        //-------------------------------------------------------------------
+        // 9. Filtrar productos por rango de precio.
+        System.out.println("\n--- 9. Filtrar productos entre $2000 y $9000 ---");
+        // Debería encontrar R002 (Medias, $2500) y E003 (Mouse, $8000)
+        inventario.filtrarProductosPorPrecio(2000, 9000);
+        
+        //-------------------------------------------------------------------
+        // 10. Mostrar las categorías disponibles.
+        System.out.println("\n--- 10. Mostrar categorías del sistema ---");
+        CategoriaProducto.mostrarCategorias();
+        
+    }
+    
+}
