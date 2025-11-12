@@ -1,0 +1,176 @@
+package tp6emilianoalvarez_1;
+
+import java.util.ArrayList;
+
+
+public class Inventario {
+
+        
+    // Colección principal para almacenar los productos
+    private ArrayList<Producto> productos = new ArrayList<>();
+        
+    // --- Métodos de Gestión del Inventario ---
+    
+    
+    public void agregarProducto(Producto p){  
+        if (p != null && !productos.contains(p)){
+            productos.add(p);
+        } else {
+            System.out.println("No se pudo agregar el producto (nulo o ya existe).");
+        }
+    }
+    
+    /**
+     * Imprime por consola la información de todos los productos en el inventario.
+     */
+    public void listarProductos(){  
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("Listado de productos cargados:");
+        for (Producto producto : productos) {
+            producto.mostrarInfo();           
+        }
+        System.out.println("------------------------------------------------------------------");
+    }             
+    
+    /**
+     * Recorre la lista y retorna un producto si coincide con el ID (ignorando mayúsculas/minúsculas).
+     * @param id El ID del producto a buscar.
+     * @return El objeto Producto encontrado, o null si no existe.
+     */
+    public Producto buscarProductoPorId(String id){     
+        Producto productoEncontrado = null;
+        for (Producto producto : productos) {
+            if (id != null && producto.getId().equalsIgnoreCase(id)){
+                productoEncontrado = producto;
+                break; // Optimización: si ya lo encontramos, dejamos de buscar.
+            }
+        }
+        return productoEncontrado;     
+    }
+    
+    /**
+     * Elimina un producto del inventario usando su ID.
+     * @param id El ID del producto a eliminar.
+     */
+    public void eliminarProducto(String id){    
+        Producto p = buscarProductoPorId(id);
+        if (p != null) {
+            productos.remove(p);
+            System.out.println("Producto: " + id + " eliminado.");
+        } else {
+            System.out.println("Error: No se pudo eliminar el producto " + id + " (no encontrado).");
+        }
+    } 
+    
+    /**
+     * Modifica la cantidad de stock de un producto específico.
+     * @param id El ID del producto a actualizar.
+     * @param nuevaCantidad El nuevo valor numérico del stock.
+     */
+    public void actualizarStock(String id, int nuevaCantidad){   
+        Producto p = buscarProductoPorId(id);
+        if (p != null) {
+            p.setCantidad(nuevaCantidad);
+            System.out.println("Stock producto " + id + " actualizado a " + nuevaCantidad);
+        } else {
+            System.out.println("Error: No se pudo actualizar el stock del producto " + id + " (no encontrado).");
+        }
+    }
+    
+    // --- Métodos de Reportes ---
+    
+    /**
+     * Muestra todos los productos que pertenecen a una categoría específica.
+     * @param categoria La CategoriaProducto a filtrar.
+     */
+    public void filtrarPorCategoria(CategoriaProducto categoria){ 
+        ArrayList<Producto> porCategoria = new ArrayList<>();
+        for (Producto producto : productos) {
+            if(categoria != null && producto.categoria.equals(categoria)){
+                porCategoria.add(producto);                
+            }           
+        }
+        
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("PRODUCTOS CATEGORIA: " + categoria);
+        if (porCategoria.isEmpty()) {
+            System.out.println("No se encontraron productos para esta categoría.");
+        } else {
+            for (Producto producto : porCategoria) {
+                producto.mostrarInfo();           
+            }
+        }
+        System.out.println("------------------------------------------------------------------");
+    } 
+    
+    /**
+     * Calcula y muestra la suma total de las cantidades de todos los productos.
+     */
+    public void obtenerTotalStock(){   
+        int sumatoriaStock = 0;
+        for (Producto producto : productos) {
+            sumatoriaStock += producto.getCantidad();
+        }
+        System.out.println("Total de Stock del inventario: " + sumatoriaStock);
+    }
+    
+    /**
+     * Busca y muestra el o los productos que tienen la cantidad máxima de stock.
+     */
+    public void obtenerProductoConMayorStock(){  
+        if (productos.isEmpty()) {
+            System.out.println("El inventario está vacío.");
+            return;
+        }
+        
+        ArrayList<Producto> listMayorStock = new ArrayList<>();
+        int mayorStock = -1; // Iniciamos con un valor bajo
+        
+        // Primera pasada para encontrar el valor máximo de stock
+        for (Producto producto : productos) {
+            if (producto.getCantidad() > mayorStock) {
+                mayorStock = producto.getCantidad();
+            }
+        }
+        
+        // Segunda pasada para encontrar todos los productos que coincidan con ese máximo
+        for (Producto producto : productos) {
+            if (producto.getCantidad() == mayorStock) {
+                listMayorStock.add(producto);
+            }
+        }
+        
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("PRODUCTOS CON MAYOR STOCK (" + mayorStock + " unidades):");
+        for (Producto producto : listMayorStock) {
+            producto.mostrarInfo();           
+        }
+        System.out.println("------------------------------------------------------------------");   
+    }
+    
+    /**
+     * Muestra productos cuyo precio se encuentra dentro de un rango monetario.
+     * @param min El precio mínimo (inclusive).
+     * @param max El precio máximo (inclusive).
+     */
+    public void filtrarProductosPorPrecio(double min, double max){ 
+        ArrayList<Producto> listIntervaloPrecios = new ArrayList<>();
+        for (Producto producto : productos) {
+            if(producto.getPrecio() >= min && producto.getPrecio() <= max){
+                listIntervaloPrecios.add(producto);
+            }           
+        }
+        
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("PRODUCTOS CON PRECIO ENTRE: " + min + " y " + max + " $");
+        if (listIntervaloPrecios.isEmpty()) {
+            System.out.println("No se encontraron productos en ese rango de precios.");
+        } else {
+            for (Producto producto : listIntervaloPrecios) {
+                producto.mostrarInfo();           
+            }
+        }
+        System.out.println("------------------------------------------------------------------");   
+    }
+    
+}
