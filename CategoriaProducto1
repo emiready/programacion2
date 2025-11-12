@@ -1,0 +1,32 @@
+package tp6emilianoalvarez_1;
+
+
+
+public enum CategoriaProducto {
+    
+    ALIMENTOS("Productos comestibles"),
+    ELECTRONICA("Dispositivos electrónicos"),
+    ROPA("Prendas de vestir"),
+    HOGAR("Artículos para el hogar");
+    
+    // Atributo para almacenar la descripción legible
+    private final String descripcion;
+
+    CategoriaProducto(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
+    public String getDescripcion() {
+        return descripcion;
+    }
+    
+    public static void mostrarCategorias(){
+        CategoriaProducto[] categorias = CategoriaProducto.values();        
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("Listado de categorías disponibles:");
+        for (CategoriaProducto categoria : categorias) {
+            System.out.println(categoria.toString()+": " +categoria.descripcion);          
+        }
+        System.out.println("------------------------------------------------------------------");        
+    }
+}
