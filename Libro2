@@ -1,0 +1,68 @@
+package tp6emilianoalvarez_2;
+public class Libro {
+
+  // --- Atributos ---
+    private String isbn; // Identificador único del libro
+    private String titulo;
+    private int aniopublicacion;
+    private Autor autor; // Asociación con la clase Autor
+    
+    /**
+     * Constructor principal de Libro.
+     * @param isbn Código ISBN.
+     * @param titulo Título de la obra.
+     * @param aniopublicacion Año de publicación.
+     * @param autor Objeto Autor asociado.
+     */
+    public Libro(String isbn, String titulo, int aniopublicacion, Autor autor) {
+        this.isbn = isbn;
+        this.titulo = titulo;
+        this.aniopublicacion = aniopublicacion;
+        this.autor = autor;
+    }
+        
+    // --- Métodos de la Clase ---
+    
+    /**
+     * Muestra la información completa del libro, incluyendo su autor.
+     */
+    public void mostrarInfo() {
+        System.out.println(this);
+    }
+
+    /**
+     * Sobreescritura de toString para mostrar info detallada.
+     * Incluye la llamada al toString() del Autor anidado.
+     * @return String con los datos del libro.
+     */
+    @Override
+    public String toString() {
+        // Llama implícitamente a autor.toString()
+        return "Libro{" + "isbn=" + isbn + ", titulo=" + titulo + ", aniopublicacion=" + aniopublicacion + ", autor=" + autor + '}';
+    }
+    
+    // --- Métodos de Acceso (Getters) ---
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public int getAniopublicacion() {
+        return aniopublicacion;
+    }
+
+    /**
+     * Obtiene el objeto Autor asociado a este libro.
+     * @return El Autor del libro.
+     */
+    public Autor getAutor() {
+        return autor;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+
+    
+}
