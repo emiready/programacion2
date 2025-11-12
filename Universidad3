@@ -1,0 +1,197 @@
+package tp6emilianoalvarez_3;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Clase contenedora que gestiona las listas de Profesores y Cursos.
+ * Actúa como intermediario para realizar asignaciones y eliminaciones.
+ */
+public class Universidad {
+    
+    // --- Atributos ---
+    private String nombre;                                  // Nombre de la universidad
+    private List <Profesor> profesores = new ArrayList<>(); // Lista de profesores
+    private List <Curso> cursos = new ArrayList<>();        // Lista de cursos
+    
+    /**
+     * Constructor de Universidad.
+     * @param nombre
+     */
+    public Universidad(String nombre) {
+        this.nombre = nombre;
+    }       
+    
+    // --- Métodos de Gestión (Agregar y Asignar) ---
+    
+    /**
+     * Registra un nuevo profesor en la universidad si no es nulo y no existe.
+     * @param p El Profesor a agregar.
+     */
+    public void agregarProfesor(Profesor p) {     
+        if (p != null && !profesores.contains(p)){
+            this.profesores.add(p);
+        }
+    }       
+    
+    /**
+     * Registra un nuevo curso en la universidad si no es nulo y no existe.
+     * @param c El Curso a agregar.
+     */
+    public void agregarCurso(Curso c) {         
+        if (c != null && !cursos.contains(c)){
+            this.cursos.add(c);
+        }       
+    }       
+    
+    /**
+     * Asigna un profesor a un curso (método principal de asignación).
+     * Busca ambos por sus IDs y luego llama a curso.setProfesor().
+     * @param codigoCurso El ID del curso.
+     * @param idProfesor El ID del profesor.
+     */
+    public void asignarProfesorACurso(String codigoCurso, String idProfesor) {    
+        Curso curso = buscarCursoPorCodigo(codigoCurso);
+        Profesor profe = buscarProfesorPorId(idProfesor);
+        
+        // Solo procede si ambos existen en la universidad
+        if (curso != null && profe != null){
+            curso.setProfesor(profe); // La lógica de sincronización está en setProfesor
+        } else {
+            System.out.println("Error de asignación: No se encontró el curso o el profesor.");
+        }
+    }
+    
+    // --- Métodos de Búsqueda (Privados o Internos) ---
+    
+    /**
+     * Busca un profesor en la lista por su ID (ignora mayúsculas/minúsculas).
+     * @param id
+     * @return El Profesor encontrado, o null.
+     */
+    public Profesor buscarProfesorPorId(String id)   { 
+        Profesor profeEncontrado = null;
+        for (Profesor profesor : this.profesores) {
+            if (id != null && profesor.getId().equalsIgnoreCase(id)){
+                profeEncontrado = profesor;  
+                break;
+            }    
+        }
+        return profeEncontrado; 
+    }
+    
+    /**
+     * Busca un curso en la lista por su Código (ignora mayúsculas/minúsculas).
+     * @param codigo
+     * @return El Curso encontrado, o null.
+     */
+    public Curso buscarCursoPorCodigo(String codigo)  { 
+        Curso cursoEncontrado = null;
+        for (Curso curso : this.cursos) {
+            if (codigo != null && curso.getCodigo().equalsIgnoreCase(codigo)){
+                cursoEncontrado = curso;   
+                break;
+            }    
+        }
+        return cursoEncontrado;     
+    } 
+    
+    // --- Métodos de Eliminación ---
+    
+    /**
+     * Elimina un curso de la universidad.
+     * Primero rompe la relación con su profesor (si la tiene).
+     * @param codigo El código del curso a eliminar.
+     */
+    public void eliminarCurso(String codigo) {   
+        Curso cursoAEliminar = buscarCursoPorCodigo(codigo);
+        if (codigo != null && this.cursos.contains(cursoAEliminar) ){
+            // Paso 1: Romper la relación (llama a setProfesor(null))
+            cursoAEliminar.setProfesor(null);
+            // Paso 2: Eliminar de la lista de la universidad
+            this.cursos.remove(cursoAEliminar);
+            System.out.println("Curso " + cursoAEliminar.getCodigo() + " ELIMINADO");
+        }    
+    }       
+    
+    /**
+     * Elimina un profesor de la universidad.
+     * Antes, desvincula a este profesor de todos los cursos que dictaba.
+     * @param id El ID del profesor a eliminar.
+     */
+    public void eliminarProfesor(String id)  {  
+        Profesor profeEliminar = buscarProfesorPorId(id);
+        
+        if (id != null && this.profesores.contains(profeEliminar) ){
+            
+            // Creamos una copia de la lista de cursos del profesor
+            // para evitar una ConcurrentModificationException.
+            List<Curso> listaDesvinculacion = new ArrayList<>(profeEliminar.getCursos());
+            
+            if(!listaDesvinculacion.isEmpty()){
+                // Iteramos sobre la copia para desvincular
+                for (Curso curso : listaDesvinculacion){
+                    curso.setProfesor(null); // Esto modifica la lista original del profesor
+                }
+            }
+            
+            // Ahora que el profesor no tiene cursos, lo eliminamos de la universidad
+            this.profesores.remove(profeEliminar);
+            System.out.println("Profesor " + profeEliminar.getId() + " ELIMINADO");
+        }
+                
+    } 
+    
+    // --- Métodos de Reportes ---
+    
+    /**
+     * Muestra un listado de todos los profesores y los cursos que dictan.
+     */
+    public void listarProfesores()   {
+        System.out.println("\n/////////// LISTADO PROFESORES (" + this.nombre + ") //////////");
+        for (Profesor profesor : profesores) {
+            System.out.println(profesor); // Muestra datos del profe
+            // Muestra los cursos asociados
+            if (profesor.getCursos().isEmpty()) {
+                System.out.println("   Cursos: (Ninguno)");
+            } else {
+                System.out.println("   Cursos: " + profesor.getCursos());
+            }
+            System.out.println("----------------------------------------");
+        }
+        System.out.println("////////////////////////////////////////\n");
+    }
+    
+    /**
+     * Muestra un listado de todos los cursos y el profesor asignado.
+     */
+    public void listarCursos() {
+        System.out.println("\n/////////// LISTADO CURSOS (" + this.nombre + ") //////////////");
+        for (Curso curso : cursos) {
+            System.out.println(curso); // Muestra datos del curso
+            // Muestra el profesor asociado
+            if (curso.getProfesor() != null) {
+                System.out.println("   Profesor: " + curso.getProfesor().getNombre());
+            } else {
+                System.out.println("   Profesor: (Sin asignar)");
+            }
+            System.out.println("----------------------------------------");
+        }
+        System.out.println("////////////////////////////////////////\n");
+    }
+    
+    /**
+     * Reporte que muestra cuántos cursos tiene asignado cada profesor.
+     */
+    public void reporteCantCursos() {
+        System.out.println("-----------------------------------------------");
+        System.out.println("------REPORTE CANT. CURSOS POR PROFESOR--------");
+        System.out.println("-----------------------------------------------");        
+        for (Profesor profesor : this.profesores) {
+            // Llama a getCantCursos() para obtener el tamaño de la lista
+            System.out.println("Profesor " + profesor.getNombre() + ": " + (profesor.getCantCursos()) + " cursos.");
+            
+        }
+        System.out.println("-----------------------------------------------");
+    }
+}
