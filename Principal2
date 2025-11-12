@@ -1,0 +1,61 @@
+package tp6emilianoalvarez_2;
+
+/**
+ * Clase principal para probar la funcionalidad del sistema de Biblioteca.
+ * Contiene el método main() que ejecuta las pruebas.
+ */
+public class Principal2 {
+    
+    public static void main(String[] args) {
+            
+        // 1. Creamos una biblioteca
+        System.out.println("--- 1. Creando la biblioteca ---");
+        Biblioteca biblio1 = new Biblioteca("Biblioteca Municipal");
+        
+        // 2. Crear al menos tres autores (Datos cambiados)
+        System.out.println("--- 2. Creando autores ---");
+        Autor autor1 = new Autor("B01", "Julio Cortázar", "Argentina");
+        Autor autor2 = new Autor("B02", "Gabriel García Márquez", "Colombiana");
+        Autor autor3 = new Autor("B03", "Stephen King", "Estadounidense");
+        Autor autor4 = new Autor("B04", "Isabel Allende", "Chilena");
+        Autor autor5 = new Autor("B05", "Haruki Murakami", "Japonesa");
+        
+        // 3. Agregar 5 libros asociados (Datos cambiados)
+        System.out.println("--- 3. Agregando libros ---");
+        // ISBNs, títulos y años han sido modificados
+        biblio1.agregarLibro("978-030-738-789-9", "Cien años de soledad", 1967, autor2);
+        biblio1.agregarLibro("978-846-633-187-0", "Rayuela", 1963, autor1);
+        biblio1.agregarLibro("978-045-116-951-8", "It (Eso)", 1986, autor3);
+        biblio1.agregarLibro("978-055-321-390-0", "La casa de los espíritus", 1982, autor4);
+        biblio1.agregarLibro("978-848-383-749-3", "Tokio Blues", 1987, autor5);
+        
+        // 4. Listar todos los libros con su información y la del autor.    
+        System.out.println("\n--- 4. Listado inicial de libros ---");
+        biblio1.listarLibros();
+        
+        // 5. Buscar un libro por su ISBN (Prueba cambiada)
+        System.out.println("\n--- 5. Buscar libro por ISBN (Rayuela) ---");
+        Libro libroBuscado = biblio1.buscarLibroPorIsbn("978-846-633-187-0");
+        System.out.println(libroBuscado); // Llama a libroBuscado.toString()
+
+        // 6. Filtrar y mostrar los libros publicados en un año específico (Prueba cambiada)
+        System.out.println("\n--- 6. Filtrar libros por año (1986) ---");
+        biblio1.filtrarLibrosPorAnio(1986); // Debería encontrar "It"
+        
+        // 7. Eliminar un libro por su ISBN (Prueba cambiada)
+        System.out.println("\n--- 7. Eliminar libro de Murakami (Tokio Blues) ---");
+        biblio1.eliminarLibro("978-848-383-749-3");
+        biblio1.listarLibros(); // Muestra la lista actualizada
+        
+        // 8. Mostrar la cantidad total de libros en la biblioteca.
+        System.out.println("\n--- 8. Cantidad total de libros ---");
+        biblio1.obtenerCantidadLibros(); // Debería mostrar 4
+        
+        // 9. Listar todos los autores de los libros disponibles en la biblioteca.
+        System.out.println("\n--- 9. Listado de autores disponibles ---");
+        biblio1.mostrarAutoresDisponibles(); // Ya no debe aparecer Murakami
+    
+    }
+    
+// fin de la clase principal    
+}
