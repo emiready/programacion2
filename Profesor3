@@ -1,0 +1,123 @@
+package tp6emilianoalvarez_3;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * Representa a un docente de la universidad.
+ * Mantiene una lista de Cursos que dicta.
+ */
+public class Profesor {
+    
+    // --- Atributos ---
+    private String id;              // Identificador único.
+    private String nombre;          // Nombre completo.
+    private String especialidad;    // Área principal.
+    private List<Curso> cursos = new ArrayList<>(); // Cursos que dicta.
+    // private int cantCursos; // Este atributo es redundante, se calcula con cursos.size()
+
+    /**
+     * Constructor para un nuevo Profesor.
+     * @param id
+     * @param nombre
+     * @param especialidad
+     */
+    public Profesor(String id, String nombre, String especialidad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.especialidad = especialidad;
+    }
+        
+    // --- Métodos de Sincronización ---
+
+    /**
+     * Vincula un curso a este profesor, asegurando la consistencia bidireccional.
+     * Si el curso no está en la lista, lo agrega.
+     * Luego, actualiza el profesor en el objeto Curso (si no está ya seteado).
+     * @param c El Curso a agregar.
+     */
+    public void agregarCurso(Curso c) { 
+        if (c != null && !cursos.contains(c)){       // Agrega el curso si no está
+            cursos.add(c);            
+            if (c.getProfesor() != this){ // Evita bucles infinitos
+                c.setProfesor(this); // Sincroniza el otro lado
+            }
+        }
+    }   
+    
+    /**
+     * Desvincula un curso de este profesor.
+     * Si el curso es removido, también setea el profesor del curso a null.
+     * @param c El Curso a eliminar.
+     */
+    public void eliminarCurso(Curso c) {
+        // 'cursos.remove(c)' devuelve true si el curso estaba y se borró
+        if (cursos.remove(c)) { 
+            if (c.getProfesor() == this) {
+                c.setProfesor(null); // Rompe la relación en el otro extremo
+            }
+        }
+    }
+    
+    // --- Métodos de Reporte ---
+    
+    /**
+     * Muestra en consola los códigos y nombres de los cursos asignados.
+     */
+    public void listarCursos()  { 
+        System.out.println("-----------------------------------------------");
+        System.out.println("Cursos asignados al profesor " + this.nombre + ":");
+        if (cursos.isEmpty()) {
+            System.out.println(" (Ninguno asignado)");
+        } else {
+            for (Curso curso : cursos) {
+                System.out.println(curso); // Llama a curso.toString()           
+            }
+        }
+        System.out.println("-----------------------------------------------");
+    }       
+    
+    /**
+     * Imprime los datos principales del profesor.
+     */
+    public void mostrarInfo()   {   
+        System.out.println(this);
+    }
+    
+    // --- Métodos de Acceso (Getters) ---
+    
+    /**
+     * Devuelve una LISTA NO MODIFICABLE de los cursos.
+     * Esto protege la lista interna de modificaciones externas.
+     * @return Lista de Cursos.
+     */
+    public List<Curso> getCursos(){   
+        return Collections.unmodifiableList(cursos);
+    }   
+
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Calcula dinámicamente la cantidad de cursos.
+     * @return El número de cursos en la lista.
+     */
+    public int getCantCursos() {
+        return cursos.size();
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+    
+    /**
+     * Representación en String del objeto Profesor.
+     * @return String con los datos.
+     */
+    @Override
+    public String toString() {
+        return "Profesor{" + "id=" + id + ", nombre=" + nombre + ", especialidad=" + especialidad + '}';
+    }
+}
