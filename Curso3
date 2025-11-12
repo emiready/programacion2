@@ -1,0 +1,96 @@
+package tp6emilianoalvarez_3;
+
+/**
+ * Representa una materia o curso en la universidad.
+ * Mantiene una referencia al Profesor que la dicta.
+ */
+public class Curso {
+    
+    // --- Atributos ---
+    private String codigo;      // Código único.
+    private String nombre;      // Nombre del curso.
+    private Profesor profesor;  // Profesor responsable
+    
+    /**
+     * Constructor del Curso. El profesor se asigna después.
+     * @param codigo
+     * @param nombre
+     */
+    public Curso(String codigo, String nombre) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.profesor = null; // Un curso puede nacer sin profesor
+    }   
+    
+    // --- Métodos de Sincronización ---
+    
+    /**
+     * Asigna un profesor a este curso, manejando la sincronización bidireccional.
+     * 1. Si el curso ya tenía un profesor, se elimina de la lista de ese profesor.
+     * 2. Se asigna el nuevo profesor.
+     * 3. Se agrega este curso a la lista del nuevo profesor (si no lo tiene ya).
+     * @param p El nuevo Profesor a asignar.
+     */
+    public void setProfesor(Profesor p) { 
+        // Si nos asignan el mismo profesor que ya tenemos, no hacemos nada.
+        if (this.profesor == p){   
+            return;
+        } 
+        
+        // Si teníamos un profesor antiguo (y no era nulo), debemos desvincularnos.
+        if (this.profesor != null){ 
+            this.profesor.eliminarCurso(this); // El profesor antiguo nos olvida
+        }
+        
+        // Asignamos el nuevo profesor (puede ser 'p' o 'null')
+        this.profesor = p; 
+        
+        // Si el nuevo profesor no es nulo y AÚN no nos tiene en su lista...
+        if (profesor != null && !profesor.getCursos().contains(this)){ 
+            profesor.agregarCurso(this); // El nuevo profesor nos agrega
+        }       
+    }
+    
+    // --- Métodos de Reporte ---
+    
+    /**
+     * Muestra código, nombre y nombre del profesor (si tiene).
+     */
+    public void mostrarInfo() {   
+        System.out.println("-----------------------------------------------");
+        System.out.println("Informacion del curso " + this.codigo + ":");
+        System.out.println(this); // Llama a toString()
+        
+        // Muestra el profesor asignado
+        if (this.profesor != null) {
+            System.out.println("   Profesor: " + this.profesor.getNombre());
+        } else {
+            System.out.println("   Profesor: (Sin asignar)");
+        }
+        
+        System.out.println("-----------------------------------------------");
+    }
+    
+    // --- Métodos de Acceso (Getters) ---
+    
+    public Profesor getProfesor() {
+        return profesor;
+    }    
+
+    public String getCodigo() {
+        return codigo;
+    }
+    
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
+     * Representación en String del objeto Curso.
+     * @return String con los datos.
+     */
+    @Override
+    public String toString() {
+        return "Curso{" + "codigo=" + codigo + ", nombre=" + nombre + '}';
+    }
+}
