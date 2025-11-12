@@ -1,0 +1,58 @@
+package tp6emilianoalvarez_2;
+
+/**
+ * Representa al creador de un Libro.
+ * Contiene ID, nombre y nacionalidad.
+ */
+public class Autor {
+    
+    // --- Atributos ---
+    private final String id;
+    private final String nombre;
+    private final String nacionalidad;
+    
+    /**
+     * Constructor para inicializar un Autor.
+     * @param id Identificador único.
+     * @param nombre Nombre completo.
+     * @param nacionalidad País de origen.
+     */
+    public Autor(String id, String nombre, String nacionalidad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.nacionalidad = nacionalidad;
+    }
+        
+    // --- Métodos de la Clase ---
+    
+    /**
+     * Muestra la información del autor en consola.
+     */
+    public void mostrarInfo() {
+        // Llama a toString() para una representación limpia
+        System.out.println(this.toString());
+    }
+
+    /**
+     * Genera una representación en String del objeto Autor.
+     * @return String con los datos del autor.
+     */
+    @Override
+    public String toString() {
+        return "Autor{" + "id=" + id + ", nombre=" + nombre + ", nacionalidad=" + nacionalidad + '}';
+    }
+    
+    // --- Métodos de Acceso ---
+
+    public String getNombre() {
+        return nombre;
+    }
+    
+    public String getId() {
+        return id;
+    }
+
+    public String getNacionalidad() {
+        return nacionalidad;
+    }
+}
