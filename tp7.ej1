@@ -1,0 +1,51 @@
+package tp7.ej1;
+
+public class TP7EJ1 {
+    public static void main(String[] args) {
+        
+// test
+
+
+        Auto miAuto = new Auto("Ford", "Focus", 5);
+        System.out.println("--- (EJERCICIO 1) Información de mi Auto ---");
+        miAuto.mostrarInfo();
+
+    }
+}
+
+
+//Clase base.
+// Contiene los atributos y métodos comunes a todos los vehículos.
+ 
+class Vehiculo {
+    protected String marca;
+    protected String modelo;
+
+    public Vehiculo(String marca, String modelo) {
+        this.marca = marca;
+        this.modelo = modelo;
+    }
+
+    public void mostrarInfo() {
+        System.out.println("Marca: " + this.marca);
+        System.out.println("Modelo: " + this.modelo);
+    }
+}
+
+ //Subclase que hereda de Vehiculo.
+
+class Auto extends Vehiculo {
+
+    private int cantidadPuertas;
+
+    public Auto(String marca, String modelo, int cantidadPuertas) {
+        super(marca, modelo);
+        this.cantidadPuertas = cantidadPuertas;
+    }
+
+    @Override
+    public void mostrarInfo() {
+        super.mostrarInfo();
+        System.out.println("Puertas: " + this.cantidadPuertas);
+    }
+}
