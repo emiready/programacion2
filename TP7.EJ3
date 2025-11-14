@@ -1,0 +1,79 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class TP7EJ3 {
+
+    public static void main(String[] args) {
+
+        List<Empleado> empleados = new ArrayList<>();
+
+        empleados.add(new EmpleadoPlanta("Ana", "A-123", 50000, 5));
+        empleados.add(new EmpleadoTemporal("Luis", "T-456", 80, 700));
+        empleados.add(new EmpleadoPlanta("Juan", "A-124", 60000, 10));
+
+        System.out.println("\n--- (EJERCICIO 3) Liquidación de Sueldos (Polimorfismo e Instanceof) ---");
+
+        for (Empleado emp : empleados) {
+            System.out.println("Liquidando a: " + emp.getNombre());
+            System.out.println("Sueldo a pagar: $" + emp.calcularSueldo());
+
+            if (emp instanceof EmpleadoPlanta) {
+                System.out.println("(Tipo: Empleado de Planta)");
+            } else if (emp instanceof EmpleadoTemporal) {
+                System.out.println("(Tipo: Empleado Temporal)");
+            }
+            System.out.println("--------------------");
+        }
+    }
+}
+
+abstract class Empleado {
+
+    protected String nombre;
+    protected String legajo;
+
+    public Empleado(String nombre, String legajo) {
+        this.nombre = nombre;
+        this.legajo = legajo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public abstract double calcularSueldo();
+}
+
+class EmpleadoPlanta extends Empleado {
+
+    private double sueldoBasico;
+    private int antiguedadAnios;
+
+    public EmpleadoPlanta(String nombre, String legajo, double sueldoBasico, int antiguedadAnios) {
+        super(nombre, legajo);
+        this.sueldoBasico = sueldoBasico;
+        this.antiguedadAnios = antiguedadAnios;
+    }
+
+    @Override
+    public double calcularSueldo() {
+        return sueldoBasico + antiguedadAnios * 1000.0;
+    }
+}
+
+class EmpleadoTemporal extends Empleado {
+
+    private int horasTrabajadas;
+    private double precioHora;
+
+    public EmpleadoTemporal(String nombre, String legajo, int horasTrabajadas, double precioHora) {
+        super(nombre, legajo);
+        this.horasTrabajadas = horasTrabajadas;
+        this.precioHora = precioHora;
+    }
+
+    @Override
+    public double calcularSueldo() {
+        return horasTrabajadas * precioHora;
+    }
+}
