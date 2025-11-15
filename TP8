@@ -1,0 +1,121 @@
+package TP8;
+
+import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+// Interfaces
+interface Pagable { double calcularTotal(); }
+interface Pago { void procesarPago(double monto); }
+interface PagoConDescuento { double aplicarDescuento(double monto); }
+interface Notificable { void notificar(String mensaje); }
+
+// Clases
+class Producto implements Pagable {
+    String nombre;
+    double precio;
+    Producto(String nombre, double precio) { this.nombre = nombre; this.precio = precio; }
+    @Override public double calcularTotal() { return precio; }
+}
+
+class Cliente implements Notificable {
+    String nombre;
+    Cliente(String nombre) { this.nombre = nombre; }
+    @Override public void notificar(String mensaje) { System.out.println(nombre + " recibió notificación: " + mensaje); }
+}
+
+class Pedido implements Pagable {
+    List<Producto> productos = new ArrayList<>();
+    Cliente cliente;
+    Pedido(Cliente cliente) { this.cliente = cliente; }
+    void agregarProducto(Producto p) { productos.add(p); }
+    @Override public double calcularTotal() { return productos.stream().mapToDouble(Producto::calcularTotal).sum(); }
+    void cambiarEstado(String nuevoEstado) { cliente.notificar("Estado cambiado a: " + nuevoEstado); }
+}
+
+class TarjetaCredito implements Pago, PagoConDescuento {
+    public void procesarPago(double monto) { System.out.println("Pago con tarjeta: " + monto); }
+    public double aplicarDescuento(double monto) { return monto * 0.9; }
+}
+
+class PayPal implements Pago {
+    public void procesarPago(double monto) { System.out.println("Pago con PayPal: " + monto); }
+}
+
+class EdadInvalidaException extends Exception {
+    EdadInvalidaException(String msg) { super(msg); }
+}
+
+public class TP8 {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // División segura
+        System.out.println("Ingrese numerador:");
+        double n1 = leerDouble(sc);
+        System.out.println("Ingrese denominador:");
+        double n2 = leerDouble(sc);
+        if (n2 == 0) System.out.println("Error: división por cero");
+        else System.out.println("Resultado: " + (n1 / n2));
+
+        sc.nextLine();
+
+        // Conversión
+        System.out.println("Ingrese texto para convertir a número:");
+        String t = sc.nextLine();
+        try {
+            int n = Integer.parseInt(t.trim());
+            System.out.println("Convertido: " + n);
+        } catch (NumberFormatException e) {
+            System.out.println("No es un número válido");
+        }
+
+        // Lectura archivo 1
+        try (BufferedReader br = new BufferedReader(new FileReader("archivo.txt"))) {
+            String l; while ((l = br.readLine()) != null) System.out.println(l);
+        } catch (Exception e) {
+            System.out.println("No se pudo leer archivo.txt");
+        }
+
+        // Edad
+        System.out.println("Ingrese edad:");
+        try {
+            int edad = Integer.parseInt(sc.nextLine());
+            if (edad < 0 || edad > 120) throw new EdadInvalidaException("Edad fuera de rango");
+            System.out.println("Edad válida");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        // Lectura archivo 2
+        try (BufferedReader br = new BufferedReader(new FileReader("archivo2.txt"))) {
+            String l; while ((l = br.readLine()) != null) System.out.println(l);
+        } catch (Exception e) {
+            System.out.println("No se pudo leer archivo2.txt");
+        }
+
+        // E-commerce
+        Cliente c = new Cliente("Juan");
+        Pedido p = new Pedido(c);
+        p.agregarProducto(new Producto("Mouse", 2000));
+        p.agregarProducto(new Producto("Teclado", 5000));
+        double total = p.calcularTotal();
+        System.out.println("Total: " + total);
+        TarjetaCredito tc = new TarjetaCredito();
+        double desc = tc.aplicarDescuento(total);
+        tc.procesarPago(desc);
+        p.cambiarEstado("Enviado");
+    }
+
+    private static double leerDouble(Scanner sc) {
+        while (true) {
+            try { return Double.parseDouble(sc.nextLine()); }
+            catch (Exception e) { System.out.println("Número inválido, reingrese:"); }
+        }
+    }
+}
